@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# sokoban solver, Jason Zavaglia 14/1/2005
+# sokoban solver, Jason Zavaglia 14/1/2015
 
 
 #  representation of board:
@@ -48,6 +48,8 @@ class BoardState(object):
 
     def __init__(self, board, target_locations, person_location, box_locations):
 
+        # ensuring members are tuples and frozensets ensures
+        # the object is hashable, and can be put in a dictionary and set
         if type(board).__name__ <> 'tuple':
             board = tuple(board)
         if type(target_locations).__name__ <> 'frozenset':
@@ -68,13 +70,9 @@ class BoardState(object):
     def __eq__(self, other):
         return (self.board, self.person_location, self.box_locations) == (other.board, other.person_location, other.box_locations)
 
-    def __str__(self):
-        return self.person_location.__repr__() + ' ' + self.box_locations.__repr__()
-
     def calculate_move_to_cell(self, location, direction):
         """ Helper function to calculate move-to cell """
         tr, tc = location
-        # bounds check
         if direction == 'U':
             tr = tr - 1
         elif direction == 'D':
@@ -214,19 +212,22 @@ def main():
 
     state = read_board(f)
 
+    # simple depth first search of board states
+
     move_to_get_to = {}
     parent = {}
     queue = collections.deque()
     move_to_get_to[state] = ''
     parent[state] = None
     queue.append(state)
-    solutions = []
+    solution = None
 
     cnt = 0
     while(len(queue)):
         s = queue.popleft()
         if s.is_solved():
-            solutions.append(s)
+            solution = s
+            break
         for direction in ('U', 'D', 'L', 'R'):
             if s.can_move(direction):
                 new_s = s.move(direction)
@@ -235,27 +236,21 @@ def main():
                     parent[new_s] = s
                     queue.append(new_s)
 
-    slns = []
-    for sln in solutions:
-        moves = []
-        while sln:
-            moves.append(move_to_get_to[sln])
-            sln = parent[sln]
-        moves.reverse()
-        slns.append(moves)
+    moves = []
+    while solution:
+        # if guards against adding the "non-move" right in the first
+        # location
+        if move_to_get_to[solution]:
+            moves.append(move_to_get_to[solution])
+        solution = parent[solution]
+    moves.reverse()
 
-    minpath = 9999999999
-    for sln in slns:
-        if len(sln) < minpath:
-            minpath = len(sln)
-
-    print "min solution steps", minpath
-
-    for sln in slns:
-        if len(sln) == minpath:
-            print "minimum solution: "
-            for i, elem in enumerate(sln):
-                print i, elem
+    if len(moves) == 0:
+        print "no solution found"
+    else:
+        print "solution: "
+        for i, elem in enumerate(moves):
+            print i+1, elem
 
 
 if __name__ == "__main__":
