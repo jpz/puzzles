@@ -212,7 +212,7 @@ def main():
 
     state = read_board(f)
 
-    # simple depth first search of board states
+    # simple breadth-first search of board states
 
     move_to_get_to = {}
     parent = {}
@@ -238,8 +238,7 @@ def main():
 
     moves = []
     while solution:
-        # if guards against adding the "non-move" right in the first
-        # location
+        # if stops us adding the very first entry where direction == ''
         if move_to_get_to[solution]:
             moves.append(move_to_get_to[solution])
         solution = parent[solution]
