@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 # sokoban solver, Jason Zavaglia 14/1/2015
 

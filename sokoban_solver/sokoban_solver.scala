@@ -52,7 +52,6 @@ if (args.length != 1 || Files.notExists(Paths.get(args(0)))) {
 val filename = args(0)
 
 type Coord = (Int, Int)
-case class Board(board: Vector[Vector[Char]])
 
 case class BoardState(board: Vector[Vector[Char]], 
     targetLocations: Set[Coord],
