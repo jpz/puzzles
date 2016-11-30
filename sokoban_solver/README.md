@@ -5,9 +5,10 @@
 This is just a small bit of fun - I was introduced to [Sokoban](https://en.wikipedia.org/wiki/Sokoban) 
 by a work colleague, and we had a problem that was bothering us.
 
-My inclination was to write a small program in Python to solve it - this is a simple solution using a breadth-first search.  Later as a programming exercise, I re-coded it as a Scala script.
+My inclination was to write a small program in Python to solve it - this is a simple solution 
+using a breadth-first search.  Later as a programming exercise, I re-coded it as a Scala script.
 
-On can run the programs with:
+You can run the programs with:
 
 `./sokoban_solver.py level4-map.txt`
 
